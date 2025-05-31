@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 import Logo from "@/components/others/Logo";
 import { Bell, ChartColumnBigIcon } from "lucide-react";
 import { format } from "date-fns";
+import { NotificationDropdown } from "@/components/ui/NotificationDropdown";
+import { notifications } from "@/utils/NotificationsDummy";
 
 
 interface SidebarLayoutProps {
@@ -19,6 +21,7 @@ interface SidebarLayoutProps {
 
 
 export function SidebarLayout({ children }: SidebarLayoutProps) {
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const links = [
         {
             label: "Dashboard",
@@ -121,12 +124,19 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
                         )}
                     </div>
                     <div className="relative">
-                        <Bell className="h-6 w-6 text-neutral-600 hover:text-neutral-800 cursor-pointer dark:text-neutral-300 dark:hover:text-neutral-100" />
+                        <Bell
+                            className="h-6 w-6 text-neutral-600 hover:text-neutral-800 cursor-pointer dark:text-neutral-300 dark:hover:text-neutral-100"
+                            onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                        />
                         {hasNotification && (
                             <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500">
                                 <div className="absolute inset-0 animate-ping rounded-full bg-red-400 opacity-75"></div>
                             </div>
                         )}
+                        <NotificationDropdown
+                            notifications={notifications}
+                            isOpen={isNotificationOpen}
+                        />
                     </div>
                 </div>
                 <div className="flex flex-1">

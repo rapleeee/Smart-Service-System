@@ -24,7 +24,7 @@ export function DashboardCard({
       "shadow-md p-4 rounded-xl transition-colors", 
       variantStyles[variant]
     )}>
-      <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+      <p className="text-sm text-gray-500 font-medium dark:text-gray-400">{title}</p>
       <h3 className="text-xl font-bold">{value}</h3>
     </div>
   )
