@@ -33,11 +33,7 @@ export function PengajuanCard({
   return (
     <div 
       onClick={handleClick}
-      className={cn(
-        "shadow-md p-4 rounded-xl transition-colors items-center justify-between cursor-pointer flex", 
-        variantStyles[variant]
-      )}
-    >
+      className={cn("shadow-md p-4 rounded-xl transition-colors items-center justify-between cursor-pointer flex", variantStyles[variant])}>
       <p className="text-sm text-gray-500 font-medium dark:text-gray-400">{title}</p>
       {Icon && (
         <div className={cn("p-2 rounded-lg", variantStyles[variant])}>
