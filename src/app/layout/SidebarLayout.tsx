@@ -32,7 +32,7 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
         },
         {
             label: "Pengajuan",
-            href: "/Pages/Pengajuan",
+            href: "/Pages/PengajuanType",
             icon: (
                 <IconFileUpload className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
             ),
