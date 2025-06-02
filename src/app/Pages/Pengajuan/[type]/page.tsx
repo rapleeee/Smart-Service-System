@@ -11,10 +11,10 @@ export default function PengajuanPage() {
   
   const renderForm = () => {
     switch(type) {
-      case 'Pertemuan': return <FormPertemuan />
-      case 'Jamuan': return <FormJamuan />
-      case 'Akomodasi': return <FormAkomodasi />
-      case 'Kendaraan': return <FormKendaraan />
+      case 'pertemuan': return <FormPertemuan />
+      case 'jamuan': return <FormJamuan />
+      case 'akomodasi': return <FormAkomodasi />
+      case 'kendaraan': return <FormKendaraan />
       default: return <div>Invalid type</div>
     }
   }
@@ -22,7 +22,9 @@ export default function PengajuanPage() {
   return (
     <SidebarLayout>
       <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6">Form Pengajuan {type}</h1>
+        <h1 className="text-2xl font-bold mb-6">
+          Form Pengajuan {typeof type === 'string' ? type.charAt(0).toUpperCase() + type.slice(1) : 'Invalid'}
+        </h1>
         {renderForm()}
       </div>
     </SidebarLayout>

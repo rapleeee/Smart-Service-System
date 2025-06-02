@@ -13,6 +13,7 @@ import { Bell, ChartColumnBigIcon } from "lucide-react";
 import { format } from "date-fns";
 import { NotificationDropdown } from "@/components/ui/NotificationDropdown";
 import { notifications } from "@/utils/NotificationsDummy";
+import { Toaster } from "sonner";
 
 
 interface SidebarLayoutProps {
@@ -145,6 +146,8 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
                     </div>
                 </div>
             </div>
+                  <Toaster />
+
         </div>
     );
 }
