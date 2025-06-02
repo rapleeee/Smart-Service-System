@@ -27,22 +27,94 @@ interface FormData {
   hotelAddress: string;
   totalRooms: number;
   occupants: RoomOccupant[];
+  proofDocument?: File;
 }
 
 export default function FormAkomodasi() {
-  const [formData, setFormData] = useState<FormData>({
+  const initialFormState: FormData = {
     unitKerja: '',
     hotel: '',
     hotelAddress: '',
     totalRooms: 0,
-    occupants: []
-  });
+    occupants: [],
+    proofDocument: undefined
+  };
+
+  const [formData, setFormData] = useState<FormData>(initialFormState);
+
+  const handleSubmit: React.FormEventHandler<HTMLButtonElement> = (e) => {
+  e.preventDefault();
+  
+  // Validate main form fields
+  if (!formData.unitKerja) {
+    toast.error("Unit kerja harus diisi");
+    return;
+  }
+  if (!formData.hotel) {
+    toast.error("Hotel harus dipilih");
+    return;
+  }
+  if (!formData.hotelAddress) {
+    toast.error("Alamat hotel harus diisi");
+    return;
+  }
+  if (!formData.totalRooms || formData.totalRooms < 1) {
+    toast.error("Jumlah kamar harus diisi");
+    return;
+  }
+  if (!formData.proofDocument) {
+    toast.error("Bukti wisma penuh harus dilampirkan");
+    return;
+  }
+   for (let i = 0; i < formData.occupants.length; i++) {
+    const occupant = formData.occupants[i];
+    if (!occupant.name) {
+      toast.error(`Nama penghuni kamar ${i + 1} harus diisi`);
+      return;
+    }
+    if (!occupant.nip) {
+      toast.error(`NIP penghuni kamar ${i + 1} harus diisi`);
+      return;
+    }
+    if (!occupant.position) {
+      toast.error(`Jabatan penghuni kamar ${i + 1} harus diisi`);
+      return;
+    }
+    if (!occupant.roomType) {
+      toast.error(`Tipe kamar ${i + 1} harus dipilih`);
+      return;
+    }
+    if (!occupant.checkIn) {
+      toast.error(`Tanggal check-in kamar ${i + 1} harus dipilih`);
+      return;
+    }
+    if (!occupant.checkOut) {
+      toast.error(`Tanggal check-out kamar ${i + 1} harus dipilih`);
+      return;
+    }
+
+    // Validate check-out date is after check-in
+    if (occupant.checkIn && occupant.checkOut && 
+        occupant.checkOut <= occupant.checkIn) {
+      toast.error(`Tanggal check-out kamar ${i + 1} harus setelah tanggal check-in`);
+      return;
+    }
+  }
+
+  // If all validations pass, save to localStorage
+  const key = `pengajuan_akomodasi_${Date.now()}`;
+  localStorage.setItem(key, JSON.stringify(formData));
+  toast.success("Pengajuan berhasil disimpan!");
+  
+  setFormData(initialFormState);
+
+};
 
   const handleRoomCountChange = (value: string) => {
     const count = parseInt(value);
     if (isNaN(count) || count < 0) {
       toast.error("Jumlah kamar tidak valid");
-      setFormData(prev => ({...prev, totalRooms: 0, occupants: []}));
+      setFormData(prev => ({ ...prev, totalRooms: 0, occupants: [] }));
       return;
     }
     setFormData(prev => ({
@@ -70,36 +142,58 @@ export default function FormAkomodasi() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 rounded-lg bg-yellow-50 border border-yellow-200">
           <h3 className="font-semibold text-yellow-800">Perhatian</h3>
-          <p className="text-sm text-yellow-700">
-            <ul>
+            <ul className="text-sm text-yellow-700">
               <li>Untuk pemesanan twinbed nama dan jabatan disatukan saja</li>
             </ul>
-          </p>
         </div>
         <div className="p-4 rounded-lg bg-red-50 border border-red-200">
           <h3 className="font-semibold text-red-800">Penting</h3>
-          <p className="text-sm text-red-700">
-            <ul>
+            <ul className="text-sm text-red-700">
               <li>*Jabatan SM/M dan AM/JM maksimal bintang 4</li>
               <li>*Jabatan SS/SPV/JS maksimal bintang 3</li>
             </ul>
-          </p>
         </div>
       </div>
 
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="col-span-full">
+            <Label className="text-sm mb-2">
+              Bukti Wisma Penuh
+              <span className="text-xs text-neutral-500 ml-1">
+                (PDF, JPEG, JPG, PNG)
+              </span>
+            </Label>
+            <Input
+              type="file"
+              accept=".pdf,.jpeg,.jpg,.png"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                    toast.error("File terlalu besar. Maksimal 5MB");
+                    return;
+                  }
+                  setFormData({ ...formData, proofDocument: file });
+                }
+              }}
+              className="cursor-pointer"
+            />
+            <p className="text-xs text-neutral-500 mt-1">
+              Maksimal ukuran file: 5MB
+            </p>
+          </div>
           <div>
             <Label className="text-sm mb-2">Unit Kerja</Label>
-            <Input 
+            <Input
               value={formData.unitKerja}
-              onChange={(e) => setFormData({...formData, unitKerja: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, unitKerja: e.target.value })}
             />
           </div>
 
           <div>
-            <Label  className="text-sm mb-2">Hotel</Label>
-            <Select onValueChange={(value) => setFormData({...formData, hotel: value})}>
+            <Label className="text-sm mb-2">Hotel</Label>
+            <Select onValueChange={(value) => setFormData({ ...formData, hotel: value })} >
               <SelectTrigger>
                 <SelectValue placeholder="Pilih Hotel" />
               </SelectTrigger>
@@ -113,15 +207,15 @@ export default function FormAkomodasi() {
 
           <div>
             <Label className="text-sm mb-2">Alamat Hotel</Label>
-            <Input 
+            <Input
               value={formData.hotelAddress}
-              onChange={(e) => setFormData({...formData, hotelAddress: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, hotelAddress: e.target.value })}
             />
           </div>
 
           <div>
             <Label className="text-sm mb-2">Jumlah Kamar</Label>
-            <Input 
+            <Input
               type="number"
               min="1"
               value={formData.totalRooms}
@@ -130,51 +224,50 @@ export default function FormAkomodasi() {
           </div>
         </div>
 
-        {/* Room Occupants */}
         {formData.occupants.map((occupant, index) => (
           <div key={index} className="border rounded-lg p-4 space-y-4">
             <h3 className="font-semibold">Data Penghuni Kamar {index + 1}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label>Nama Lengkap</Label>
-                <Input 
+                <Label className="text-sm mb-2">Nama Lengkap</Label>
+                <Input
                   value={occupant.name}
                   onChange={(e) => updateOccupant(index, 'name', e.target.value)}
                 />
               </div>
-              
+
               <div>
-                <Label>NIP</Label>
-                <Input 
+                <Label className="text-sm mb-2">NIP</Label>
+                <Input
                   value={occupant.nip}
                   onChange={(e) => updateOccupant(index, 'nip', e.target.value)}
                 />
               </div>
 
               <div>
-                <Label>Jabatan</Label>
-                <Input 
+                <Label className="text-sm mb-2">Jabatan</Label>
+                <Input
                   value={occupant.position}
                   onChange={(e) => updateOccupant(index, 'position', e.target.value)}
                 />
               </div>
 
               <div>
-                <Label>Tipe Kamar</Label>
+                <Label className="text-sm mb-2">Tipe Kamar</Label>
                 <Select onValueChange={(value) => updateOccupant(index, 'roomType', value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Pilih Tipe Kamar" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="single">Single</SelectItem>
-                    <SelectItem value="double">Double</SelectItem>
+                    <SelectItem value="single">Twin</SelectItem>
+                    <SelectItem value="double">King</SelectItem>
                     <SelectItem value="suite">Suite</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label>Check-in</Label>
+                <Label className="text-sm mb-2">Check-in</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -200,7 +293,7 @@ export default function FormAkomodasi() {
               </div>
 
               <div className="space-y-2">
-                <Label>Check-out</Label>
+                <Label className="text-sm mb-2">Check-out</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -228,7 +321,7 @@ export default function FormAkomodasi() {
           </div>
         ))}
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" onClick={handleSubmit}>
           Submit Pengajuan
         </Button>
       </div>
