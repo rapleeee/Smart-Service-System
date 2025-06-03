@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 interface DashboardCardProps {
   title: string;
   value: string;
+  change?: string;
   variant?: 'default' | 'blue' | 'green' | 'yellow' | 'red';
 }
 
