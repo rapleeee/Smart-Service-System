@@ -5,6 +5,7 @@ import {
     IconArrowLeft,
     IconFileUpload,
     IconLayoutDashboardFilled,
+    IconMenu2,
     IconSettings,
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
@@ -14,6 +15,8 @@ import { format } from "date-fns";
 import { NotificationDropdown } from "@/components/ui/NotificationDropdown";
 import { notifications } from "@/utils/NotificationsDummy";
 import { Toaster } from "sonner";
+import { clsx } from 'clsx';
+import Image from "next/image";
 
 
 interface SidebarLayoutProps {
@@ -99,7 +102,7 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
                                 label: "Super Admin",
                                 href: "#",
                                 icon: (
-                                    <img
+                                    <Image
                                         src="https://avatar.iran.liara.run/public/17"
                                         className="h-7 w-7 shrink-0 rounded-full"
                                         width={50}
@@ -112,34 +115,50 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
                     </div>
                 </SidebarBody>
             </Sidebar>
-            <div className="flex flex-1 flex-col">
-                <div className="flex h-16 items-center justify-between px-4 dark:border-neutral-700 dark:bg-neutral-900">
-                    <div className="text-sm text-neutral-600 dark:text-neutral-300">
-                        {currentTime ? (
-                            <>
-                                {format(currentTime, 'EEEE, dd MMMM yyyy')} |{' '}
-                                {format(currentTime, 'HH:mm:ss')}
-                            </>
-                        ) : (
-                            <span>Loading...</span>
-                        )}
+<div className="flex flex-1 flex-col">
+    <div className="flex h-16 items-center justify-between gap-4 px-4 dark:border-neutral-700 dark:bg-neutral-900">
+        {/* Left side - Date Time */}
+        <div className="text-sm text-neutral-600 dark:text-neutral-300">
+            {currentTime ? (
+                <>
+                    <span className="hidden md:inline">
+                        {format(currentTime, 'EEEE, dd MMMM yyyy')} |{' '}
+                    </span>
+                    {format(currentTime, 'HH:mm:ss')}
+                </>
+            ) : (
+                <span>Loading...</span>
+            )}
+        </div>
+
+        {/* Right side - Menu and Bell */}
+        <div className="flex items-center space-x-4">
+            <div className="relative">
+                <Bell
+                    className="h-6 w-6 text-neutral-600 hover:text-neutral-800 cursor-pointer dark:text-neutral-300 dark:hover:text-neutral-100"
+                    onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                />
+                {hasNotification && (
+                    <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500">
+                        <div className="absolute inset-0 animate-ping rounded-full bg-red-400 opacity-75"></div>
                     </div>
-                    <div className="relative">
-                        <Bell
-                            className="h-6 w-6 text-neutral-600 hover:text-neutral-800 cursor-pointer dark:text-neutral-300 dark:hover:text-neutral-100"
-                            onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                        />
-                        {hasNotification && (
-                            <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500">
-                                <div className="absolute inset-0 animate-ping rounded-full bg-red-400 opacity-75"></div>
-                            </div>
-                        )}
-                        <NotificationDropdown
-                            notifications={notifications}
-                            isOpen={isNotificationOpen}
-                        />
-                    </div>
-                </div>
+                )}
+                <NotificationDropdown
+                    notifications={notifications}
+                    isOpen={isNotificationOpen}
+                />
+            </div>
+            {/* <div className="md:hidden">
+                <button
+                    aria-label="Toggle sidebar"
+                    onClick={() => setOpen(!open)}
+                    className="p-2 text-neutral-600 hover:text-neutral-800 dark:text-neutral-300"
+                >
+                    <IconMenu2 className="h-6 w-6" />
+                </button>
+            </div> */}
+        </div>
+    </div>
                 <div className="flex flex-1">
                     <div className="flex min-h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 md:p-10 dark:border-neutral-700 dark:bg-neutral-900">
                         {children}

@@ -131,7 +131,11 @@ export default function FormAkomodasi() {
     }));
   };
 
-  const updateOccupant = (index: number, field: keyof RoomOccupant, value: any) => {
+  const updateOccupant = (
+    index: number,
+    field: keyof RoomOccupant,
+    value: string | Date | undefined
+  ) => {
     const newOccupants = [...formData.occupants];
     newOccupants[index] = { ...newOccupants[index], [field]: value };
     setFormData({ ...formData, occupants: newOccupants });

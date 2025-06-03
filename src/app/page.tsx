@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { IconCar, IconCalendarEvent, IconUsers, IconReceipt } from '@tabler/icons-react'
 import Link from 'next/link'
 
-// Dummy data for recent activities
 const recentActivities = [
   { id: 1, type: 'Kendaraan', user: 'John Doe', status: 'Pending', date: '2025-06-03', dept: 'IT' },
   { id: 2, type: 'Pertemuan', user: 'Jane Smith', status: 'Approved', date: '2025-06-02', dept: 'HR' },
@@ -17,12 +16,11 @@ const recentActivities = [
 export default function Dashboard() {
   return (
     <SidebarLayout>
-      <div className="p-6 space-y-6">
-        {/* Welcome Section */}
+        <div className="p-6 space-y-6">
         <div className="flex-col md:flex sm:flex-row  justify-between items-center">
           <div className="mb-4">
             <h1 className="text-2xl font-bold">Dashboard Smart Service System</h1>
-            <p className="text-muted-foreground">Welcome back! Here's what's happening today.</p>
+            <p className="text-muted-foreground">Welcome back! Here&apos;s what&apos;s happening today.</p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
             <Button asChild>
@@ -34,7 +32,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <DashboardCard 
             title="Total Permintaan" 
             value="120" 
@@ -129,12 +127,14 @@ export default function Dashboard() {
               </div>
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full">
                 <div>
-                <h3 className="font-medium">Panduan Penggunaan</h3>
-                <p className="text-sm text-muted-foreground">
-                  Lihat cara menggunakan sistem layanan dan tips pengajuan yang efektif
-                </p>
+                  <h3 className="font-medium">Panduan Penggunaan</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Lihat cara menggunakan sistem layanan dan tips pengajuan yang efektif
+                  </p>
                 </div>
-                <Link className='text-sm mt-2 hover:underline' href="/Pages/Panduan">Baca Selengkapnya</Link>
+                <Link className="text-sm mt-2 hover:underline" href="/Pages/Panduan">
+                  Baca Selengkapnya
+                </Link>
               </div>
             </div>
           </CardContent>
