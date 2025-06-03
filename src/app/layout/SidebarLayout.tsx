@@ -5,7 +5,6 @@ import {
     IconArrowLeft,
     IconFileUpload,
     IconLayoutDashboardFilled,
-    IconMenu2,
     IconSettings,
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
@@ -15,7 +14,6 @@ import { format } from "date-fns";
 import { NotificationDropdown } from "@/components/ui/NotificationDropdown";
 import { notifications } from "@/utils/NotificationsDummy";
 import { Toaster } from "sonner";
-import { clsx } from 'clsx';
 import Image from "next/image";
 
 
