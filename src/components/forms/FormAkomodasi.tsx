@@ -35,7 +35,7 @@ export default function FormAkomodasi() {
     unitKerja: '',
     hotel: '',
     hotelAddress: '',
-    totalRooms: 0,
+    totalRooms: 0,  
     occupants: [],
     proofDocument: undefined
   };

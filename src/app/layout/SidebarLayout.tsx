@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { NotificationDropdown } from "@/components/ui/NotificationDropdown";
 import { notifications } from "@/utils/NotificationsDummy";
 import { Toaster } from "sonner";
+import Image from "next/image";
 
 
 interface SidebarLayoutProps {
@@ -99,12 +100,13 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
                                 label: "Super Admin",
                                 href: "#",
                                 icon: (
-                                    <img
+                                    <Image
                                         src="https://avatar.iran.liara.run/public/17"
                                         className="h-7 w-7 shrink-0 rounded-full"
                                         width={50}
                                         height={50}
                                         alt="Avatar"
+                                        priority
                                     />
                                 ),
                             }}

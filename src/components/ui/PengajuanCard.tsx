@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface PengajuanCardProps {
   title: string;
@@ -17,6 +18,7 @@ export function PengajuanCard({
   type
 }: PengajuanCardProps) {
   const router = useRouter();
+  const [ isLoading, setIsLoading] = useState(false);
   
   const variantStyles = {
     default: "bg-white hover:bg-gray-50",
@@ -26,19 +28,29 @@ export function PengajuanCard({
     red: "bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30"
   };
 
-  const handleClick = () => {
-    router.push(`/Pages/Pengajuan/${type}`);
+  const handleClick = async() => {
+    setIsLoading(true);
+    await router.push(`/Pages/Pengajuan/${type}`);
+    setIsLoading(false);
   };
 
   return (
     <div 
       onClick={handleClick}
-      className={cn("shadow-md p-4 rounded-xl transition-colors items-center justify-between cursor-pointer flex", variantStyles[variant])}>
-      <p className="text-sm text-gray-500 font-medium dark:text-gray-400">{title}</p>
-      {Icon && (
-        <div className={cn("p-2 rounded-lg", variantStyles[variant])}>
-          <Icon className="h-5 w-5" />
+      className={cn("shadow-md p-4 rounded-xl transition-colors items-center justify-between cursor-pointer flex", variantStyles[variant],  isLoading && "opacity-50 cursor-not-allowed")}>
+      {isLoading ? (
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
         </div>
+      ) : (
+        <>
+          <p className="text-sm text-gray-500 font-medium dark:text-gray-400">{title}</p>
+          {Icon && (
+            <div className={cn("p-2 rounded-lg", variantStyles[variant])}>
+              <Icon className="h-5 w-5" />
+            </div>
+          )}
+        </>
       )}
     </div>
   );
