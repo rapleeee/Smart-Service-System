@@ -23,9 +23,6 @@ export default function Dashboard() {
             <p className="text-muted-foreground">Welcome back! Here&apos;s what&apos;s happening today.</p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
-            <Button asChild>
-              <Link href="/Pages/Kendaraan">Request Kendaraan</Link>
-            </Button>
             <Button variant="outline" asChild>
               <Link href="/Pages/Laporan">Lihat Laporan</Link>
             </Button>
