@@ -25,12 +25,9 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      // Simulate login - replace with actual auth
       await new Promise(resolve => setTimeout(resolve, 1000))
       toast.success("Login berhasil!")
       router.push("/")
-    } catch (error) {
-      toast.error("Username atau password salah")
     } finally {
       setIsLoading(false)
     }
