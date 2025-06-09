@@ -116,7 +116,6 @@ export default function UscDashboard() {
     // In production, integrate with your email service (e.g., SendGrid, AWS SES)
     const request = requests.find(r => r.id === id)
 
-    try {
       toast.promise(
         new Promise(resolve => setTimeout(resolve, 1500)),
         {
@@ -127,10 +126,7 @@ export default function UscDashboard() {
       setRequests(requests.map(r =>
         r.id === id ? { ...r, status: 'Sent to Vendor' } : r
       ))
-    } catch (error) {
-      toast.error("Gagal mengirim ke vendor")
-    }
-  }
+    } 
 
   return (
     <SidebarLayout>
