@@ -8,11 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
+import { isTimeSlotBooked, getBookingsForDate } from "@/utils/bookingDates"
+import { format, isBefore, addDays } from "date-fns"
+
 
 const formSchema = z.object({
   judulPertemuan: z.string().min(1, "Judul pertemuan harus diisi"),
@@ -46,9 +48,12 @@ export default function FormPertemuan() {
   };
 
   const [formData, setFormData] = useState<FormData>(initialFormState);
+  const [selectedRoom, setSelectedRoom] = useState<string>("");
+  const [bookingConflict, setBookingConflict] = useState(false);
+
   
 
-  const handleSubmit = (e: React.FormEvent) => {
+   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     const result = formSchema.safeParse(formData);
@@ -58,11 +63,56 @@ export default function FormPertemuan() {
       return;
     }
 
+    // Check if date is at least 2 days from now
+    const minDate = addDays(new Date(), 2);
+    if (formData.tanggal && isBefore(formData.tanggal, minDate)) {
+      toast.error("Pengajuan harus minimal 2 hari dari sekarang");
+      return;
+    }
+
+    // Check for booking conflicts
+    if (formData.tanggal && isTimeSlotBooked(
+      formData.ruangan,
+      formData.tanggal,
+      formData.waktuMulai,
+      formData.waktuSelesai
+    )) {
+      toast.error("Jadwal yang dipilih sudah dibooking!");
+      return;
+    }
+
     const key = `pengajuan_pertemuan_${Date.now()}`;
     localStorage.setItem(key, JSON.stringify(formData));
     toast.success("Pengajuan pertemuan berhasil disimpan!");
     setFormData(initialFormState);
   };
+  const checkAvailability = () => {
+    if (formData.tanggal && formData.ruangan) {
+      const bookings = getBookingsForDate(formData.ruangan, formData.tanggal);
+      if (bookings.length > 0) {
+        setBookingConflict(true);
+        // Show existing bookings
+        toast.warning(
+          <div className="space-y-2">
+            <p className="font-medium">Jadwal terbooked untuk ruangan ini:</p>
+            {bookings.map(booking => (
+              <p key={booking.id} className="text-sm">
+                {booking.waktuMulai} - {booking.waktuSelesai} ({booking.departemen})
+              </p>
+            ))}
+          </div>
+        );
+      } else {
+        setBookingConflict(false);
+      }
+    }
+  };
+
+  // Add useEffect to check availability when room or date changes
+  useEffect(() => {
+    checkAvailability();
+  }, [formData.ruangan, formData.tanggal]);
+
 
   return (
     <div className="space-y-8">
@@ -138,19 +188,39 @@ export default function FormPertemuan() {
           </div>
 
           <div>
-            <Label className="mb-2">Ruangan</Label>
-            <Select onValueChange={(value) => setFormData({...formData, ruangan: value})}>
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih ruangan" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="meeting-room-1">Meeting Room 1 (Kapasitas: 10 orang)</SelectItem>
-                <SelectItem value="meeting-room-2">Meeting Room 2 (Kapasitas: 20 orang)</SelectItem>
-                <SelectItem value="ballroom">Ballroom (Kapasitas: 100 orang)</SelectItem>
-                <SelectItem value="auditorium">Auditorium (Kapasitas: 200 orang)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        <Label className="mb-2">Ruangan</Label>
+        <Select 
+          onValueChange={(value) => {
+            setFormData({...formData, ruangan: value});
+            setSelectedRoom(value);
+          }}
+        >
+          <SelectTrigger className={cn(
+            bookingConflict && "border-yellow-500 ring-yellow-500"
+          )}>
+            <SelectValue placeholder="Pilih ruangan" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="meeting-room-1">
+              Meeting Room 1 (Kapasitas: 10 orang)
+            </SelectItem>
+            <SelectItem value="meeting-room-2">
+              Meeting Room 2 (Kapasitas: 20 orang)
+            </SelectItem>
+            <SelectItem value="ballroom">
+              Ballroom (Kapasitas: 100 orang)
+            </SelectItem>
+            <SelectItem value="auditorium">
+              Auditorium (Kapasitas: 200 orang)
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        {bookingConflict && (
+          <p className="mt-2 text-sm text-yellow-600">
+            ⚠️ Ada jadwal yang sudah terbooked pada tanggal ini
+          </p>
+        )}
+      </div>
 
           <div>
             <Label className="mb-2">Jumlah Peserta</Label>
