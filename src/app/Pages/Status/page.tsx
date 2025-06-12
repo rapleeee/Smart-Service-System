@@ -175,9 +175,9 @@ export default function StatusPage() {
                           />
                         ))}
                       </div>
-                      <p className="text-sm text-muted-foreground italic">
-                        "{request.feedback.comment}"
-                      </p>
+                     <p className="text-sm text-muted-foreground italic">
+  {`${request.feedback.comment}`}
+</p>
                     </div>
                   )}
                 </div>
