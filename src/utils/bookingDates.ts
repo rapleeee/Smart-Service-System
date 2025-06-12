@@ -18,6 +18,22 @@ export const bookedData: BookingData[] = [
     departemen: "Direktorat SDM"
   },
   {
+    id: "BOOK-003",
+    ruangan: "meeting-room-1",
+    tanggal: new Date(2025, 5, 19), // June 15, 2025
+    waktuMulai: "09:00",
+    waktuSelesai: "11:00",
+    departemen: "Direktorat Operasional"
+  },
+  {
+    id: "BOOK-004",
+    ruangan: "meeting-room-2",
+    tanggal: new Date(2025, 5, 19), // June 15, 2025
+    waktuMulai: "11:00",
+    waktuSelesai: "15:00",
+    departemen: "Direktorat Teknologi Informasi"
+  },
+  {
     id: "BOOK-002",
     ruangan: "ballroom",
     tanggal: new Date(2025, 5, 16), // June 16, 2025
