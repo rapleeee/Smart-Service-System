@@ -81,7 +81,6 @@ export default function StatusPage() {
             </p>
           </div>
           
-          {/* Status Summary */}
           <div className="flex gap-3">
             {[
               { label: 'Menunggu', status: 'pending', color: 'yellow' },
@@ -187,7 +186,6 @@ export default function StatusPage() {
           ))}
         </div>
 
-        {/* Feedback Modal with animation */}
         {showFeedback && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-in fade-in duration-200">
             <Card className="w-full max-w-md mx-4 shadow-xl animate-in slide-in-from-bottom duration-300">

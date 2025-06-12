@@ -48,7 +48,6 @@ export default function FormPertemuan() {
   };
 
   const [formData, setFormData] = useState<FormData>(initialFormState);
-  const [selectedRoom, setSelectedRoom] = useState<string>("");
   const [bookingConflict, setBookingConflict] = useState(false);
 
   
@@ -192,7 +191,6 @@ export default function FormPertemuan() {
         <Select 
           onValueChange={(value) => {
             setFormData({...formData, ruangan: value});
-            setSelectedRoom(value);
           }}
         >
           <SelectTrigger className={cn(
