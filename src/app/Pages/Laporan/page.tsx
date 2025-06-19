@@ -16,23 +16,59 @@ import { toast } from "sonner"
 const pengajuanData = [
   {
     id: 1,
-    tanggal: "2025-06-01",
-    nama: "John Doe",
-    departemen: "IT",
-    jenisPengajuan: "Kendaraan",
+    tanggalPengajuan: "2025-05-19",
+    nama: "Ilham",
+    unit: "KGB",
+    jenisPengajuan: "Jamuan Kegiatan",
+    tanggalMulai: "2025-05-23",
+    tanggalSelesai: "2025-05-23",
     status: "Disetujui",
-    keterangan: "Perjalanan dinas ke Jakarta"
+    keteranganKegiatan: "Rapat LPJ KA PSO TA 2024",
   },
   {
     id: 2,
-    tanggal: "2025-06-02",
-    nama: "Jane Smith",
-    departemen: "HR",
-    jenisPengajuan: "Pertemuan",
-    status: "Pending",
-    keterangan: "Meeting dengan client"
+    tanggalPengajuan: "2025-05-20",
+    nama: "Bima",
+    unit: "KGP",
+    jenisPengajuan: "Jamuan Kegiatan",
+    tanggalMulai: "2025-05-24",
+    tanggalSelesai: "2025-05-24",
+    status: "Disetujui",
+    keteranganKegiatan: "Rapat Realisasi RAB KA Perintis TA 2024",
   },
-  // Add more dummy data here
+  {
+    id: 3,
+    tanggalPengajuan: "2025-05-21",
+    nama: "Rizkar",
+    unit: "CCC",
+    jenisPengajuan: "Kendaraan Dinas",
+    tanggalMulai: "2025-05-25",
+    tanggalSelesai: "2025-05-28",
+    status: "Disetujui",
+    keteranganKegiatan: "Rekonsiliasi Biaya Inject",
+  },
+  {
+    id: 4,
+    tanggalPengajuan: "2025-05-25",
+    nama: "Bagus",
+    unit: "KCA",
+    jenisPengajuan: "Penginapan",
+    tanggalMulai: "2025-06-01",
+    tanggalSelesai: "2025-06-05",
+    status: "Disetujui",
+    keteranganKegiatan: "Program Rencana Kerja Anggaran",
+  },
+  {
+    id: 5,
+    tanggalPengajuan: "2025-05-28",
+    nama: "Dini",
+    unit: "CPM",
+    jenisPengajuan: "Meeting Room",
+    tanggalMulai: "2025-05-29",
+    tanggalSelesai: "2025-05-29",
+    status: "Disetujui",
+    keteranganKegiatan: "Penerapan Dynamic Pricing",
+  }
 ]
 
 export default function LaporanPage() {
@@ -55,22 +91,26 @@ export default function LaporanPage() {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">No</TableHead>
-                <TableHead>Tanggal</TableHead>
+                <TableHead>Tanggal Pengajuan</TableHead>
                 <TableHead>Nama</TableHead>
-                <TableHead>Departemen</TableHead>
+                <TableHead>Unit</TableHead>
                 <TableHead>Jenis Pengajuan</TableHead>
+                <TableHead>Tanggal Mulai</TableHead>
+                <TableHead>Tanggal Selesai</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Keterangan</TableHead>
+                <TableHead>Keterangan Kegiatan</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {pengajuanData.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">{item.id}</TableCell>
-                  <TableCell>{item.tanggal}</TableCell>
+                  <TableCell>{item.tanggalPengajuan}</TableCell>
                   <TableCell>{item.nama}</TableCell>
-                  <TableCell>{item.departemen}</TableCell>
+                  <TableCell>{item.unit}</TableCell>
                   <TableCell>{item.jenisPengajuan}</TableCell>
+                  <TableCell>{item.tanggalMulai}</TableCell>
+                  <TableCell>{item.tanggalSelesai}</TableCell>
                   <TableCell>
                     <span className={`px-2 py-1 rounded-full text-xs ${
                       item.status === "Disetujui" 
@@ -80,7 +120,7 @@ export default function LaporanPage() {
                       {item.status}
                     </span>
                   </TableCell>
-                  <TableCell>{item.keterangan}</TableCell>
+                  <TableCell>{item.keteranganKegiatan}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
